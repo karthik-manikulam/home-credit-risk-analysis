@@ -1,0 +1,31 @@
+# Dataset files
+datasets/
+*.csv
+*.zip
+
+# Credentials
+.env
+*.pem
+*.key
+credentials.json
+
+# Jupyter
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+
+# Virtual environments
+venv/
+.venv/
+
+# Power BI
+*.pbix
+*.pbix.tmp
+
+# Temporary files
+*.tmp
+*.bak
+
+# OS files
+.DS_Store
+Thumbs.dbgit status

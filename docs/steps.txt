@@ -1,0 +1,40 @@
+Step 1: Business questions
+- Write the main question, the KPIs, and the sub-questions (the 16 above, or a trimmed 10 to 12) in the README before touching any data.
+- Sub-questions are grouped as: portfolio overview, applicant profile, affordability, bureau history, previous applications, risk concentration, and model-linked questions.
+
+Step 2: Storage, understanding, and cleaning
+1. Load the core CSVs (`application_train`, `bureau`, `previous_application`) into MySQL as raw tables. Use chunks only for big files, and add indexes on `SK_ID_CURR`.
+2. Pull `application_train` into Jupyter to understand it: shape, datatypes, target balance, missing values, outliers, and the `DAYS_*` columns.
+3. Clean it (fix 365243, convert days to years, handle `XNA`, handle nulls, cap outliers) and save it as `application_clean` in MySQL.
+4. For `bureau` and `previous_application`, do light cleaning inside SQL, only for what you need.
+
+Step 3: Keep useful columns and build features
+1. Keep only the columns that help answer your questions (from roughly 120 down to about 25 to 40).
+2. In SQL, aggregate `bureau` and `previous_application` to one row per applicant
+3. Join everything into one table, `loan_features`.
+4. Add derived columns: age band, income band, credit-to-income ratio, and annuity-to-income ratio.
+
+Step 4: Business analysis in SQL
+- Answer the overview, profile, affordability, bureau, previous-application, and risk-concentration questions on `loan_features`.
+- Use `GROUP BY`, CTEs, and window functions (`NTILE`, `RANK`).
+- Write an insight statement after each query.
+
+Step 5: Machine learning in Jupyter
+1. Load `loan_features` from MySQL.
+2. **Split train/test first**, then impute and encode on the train set only, to avoid leakage.
+3. Baseline logistic regression, then LightGBM, with class weights for the imbalance.
+4. Evaluate with AUC, precision-recall, and a lift/gains chart.
+5. Use SHAP for the top drivers, pick the threshold by expected cost, and assign low/medium/high risk tiers.
+6. Save the predictions and tiers as a CSV or a MySQL table.
+
+Step 6: Dashboard in Tableau
+- Export the SQL analysis tables and the model scores as CSVs (Tableau Public can't connect to MySQL directly).
+- Build three pages: portfolio overview, segment risk explorer, and risk tiers with the "what if we cut off tier X" view.
+
+Step 7: Publish
+- Write the README in this order: business problem, key findings, policy recommendation, then methodology, with dashboard screenshots at the top and the GitHub repo linked.
+
+Summary
+Questions → load raw into MySQL → clean in Jupyter → build one feature table in SQL → analyze in SQL → model in Jupyter → dashboard in Tableau → README.
+
+Want me to start on Step 2 with the loading commands?

@@ -1,0 +1,34 @@
+-- BQ1: What does the loan portfolio look like, and what is the baseline risk?
+-- Sub-questions: How big is the book? How many customers have payment difficulties? How do loan types differ?g
+-- 1.	Overall payment-difficulty rate (total applicants, count, %).
+-- 2.	Rate by NAME_CONTRACT_TYPE (cash vs revolving).
+-- 3.	Average income, credit amount and annuity for TARGET = 1 vs TARGET = 0.
+-- 4.	Loan-amount buckets (under 100K, 100K to 300K, 300K to 600K, 600K+) with count and rate per bucket.
+-- BQ2: Which applicant profiles carry the most risk?
+-- Sub-questions: Does age, income, job, education or family situation change risk?
+-- 5.	Rate by age_band.
+-- 6.	Rate by income_band (NTILE(5) on income).
+-- 7.	Top 10 occupations by rate (at least 1,000 applicants, using HAVING).
+-- 8.	Rate by NAME_EDUCATION_TYPE and NAME_INCOME_TYPE.
+-- 9.	Rate by years-employed band, with null employment as its own group.
+-- 10.	Rate by gender, family status and number of children.
+-- 11.	Do car or realty owners do better? Compare FLAG_OWN_CAR and FLAG_OWN_REALTY, then combine both.
+-- BQ3: Is the loan affordable for the applicant?
+-- Sub-questions: At what debt burden does risk jump?
+-- 12.	Rate by credit_income_ratio band (<1, 1 to 2, 2 to 3, 3 to 5, 5+).
+-- 13.	Rate by annuity_income_ratio band (<10%, 10 to 20%, 20 to 30%, 30%+).
+-- 14.	Find the band where the rate rises most steeply, comparing with the previous band using LAG().
+-- 15.	Among high credit-to-income applicants with a strong EXT_SOURCE_2, is risk still high?
+-- BQ4: Does past credit behavior predict payment difficulty?
+-- Sub-questions: Do prior loans, overdues and refusals matter?
+-- 16.	Rate by number of prior bureau loans (0, 1 to 2, 3 to 5, 6+).
+-- 17.	Rate with any overdue bureau credit (CREDIT_DAY_OVERDUE > 0) vs none.
+-- 18.	Average AMT_CREDIT_S`UM_DEBT / AMT_CREDIT_SUM for TARGET = 1 vs TARGET = 0.
+-- 19.	Rate by number of previous refusals (0, 1, 2, 3+), using NAME_CONTRACT_STATUS = 'Refused'.
+-- 20.	First-time borrowers (no previous applications) vs repeat customers.
+-- BQ5: Where is risk concentrated, and what policy should change?
+-- Sub-questions: How much of the loss sits in a small segment? What is the cost of rejecting them?
+-- 21.	Rank applicants into deciles with NTILE(10) on a simple risk score, then show the rate per decile.
+-- 22.	Cumulative share of all payment difficulties captured by the top 10% and 20% riskiest applicants (SUM() OVER).
+-- 23.	Policy simulation: if the top decile is rejected, how many problem loans are avoided and how many good customers are lost? Show counts and percentages.
+-- 24.	Segment table combining age_band, income_band and credit_income_ratio band. Show segments with 500+ applicants and list the 10 highest-risk ones.
