@@ -7,3 +7,4 @@ jupyter
 ipykernel
 mysql-connector-python
 sqlalchemy
+Mysql
